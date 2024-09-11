@@ -1,8 +1,8 @@
 import Container from "@mui/material/Container";
-import ContactsForm from '../ContactsForm/ContactsForm.jsx'
-import ContactsList from '../ContactsList/ContactsList.jsx'
-import Filter from '../Filter/Filter.jsx'
-import {Menu} from './Contacts.js'
+import ContactsForm from '../../components/ContactsForm/ContactsForm.jsx'
+import ContactsList from '../../components/ContactsList/ContactsList.jsx'
+import Filter from '../../components/Filter/Filter.jsx'
+import {Menu} from './ContactPage.js'
 import {useDispatch} from 'react-redux'
 import {fetchContacts} from '../../redux/contacts/operations.js'
 import {useEffect} from "react";
@@ -14,7 +14,7 @@ const ContainerStyles = {
     flexDirection: 'column',
     gap: '30px'
 }
-const Contacts = () => {
+const ContactPage = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -30,4 +30,4 @@ const Contacts = () => {
     </Container>
 }
 
-export default Contacts;
+export default ContactPage;

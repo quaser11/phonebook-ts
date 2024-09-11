@@ -1,9 +1,9 @@
 import Navigation from './Navigation/Navigation.jsx';
 import {Routes, Route} from "react-router-dom";
-import HomePage from './HomePage/HomePage.jsx'
-import SignUp from './SignUp/SignUp.jsx'
-import LogIn from './LogIn/LogIn.jsx'
-import Contacts from './Contacts/Contacts.jsx'
+import HomePage from '../pages/HomePage/HomePage.jsx'
+import SignUp from '../pages/SignUp/SignUp.jsx'
+import LogIn from '../pages/LogIn/LogIn.jsx'
+import ContactPage from '../pages/ContactPage/ContactPage.jsx'
 import PrivateRoute from './PrivateRoute/PrivateRoute.jsx'
 import PublicRoute from './PublicRoute/PublicRoute.jsx'
 import {useDispatch, useSelector} from "react-redux";
@@ -30,7 +30,7 @@ function App() {
             {!refreshing && <Routes>
                 <Route path="/" element={<Navigation/>}>
                     <Route index path="/" element={<PublicRoute><HomePage/></PublicRoute>}/>
-                    <Route path='/contacts' element={<PrivateRoute><Contacts/></PrivateRoute>}/>
+                    <Route path='/contacts' element={<PrivateRoute><ContactPage/></PrivateRoute>}/>
                     <Route index path="/login" element={<PublicRoute restricted><LogIn/></PublicRoute>}/>
                     <Route path="/register" element={<PublicRoute restricted><SignUp/></PublicRoute>}/>
                 </Route>
