@@ -31,7 +31,7 @@ const ContactsList = () => {
         <List
         itemLayout="horizontal"
         dataSource={data}
-        locale={{emptyText: 'No ContactPage'}}
+        locale={{emptyText: 'No Contact'}}
         loading={loading}
         renderItem={(item, index) => (
             <List.Item
