@@ -1,16 +1,24 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {fetchContacts, addContact, removeContact, editContact} from './operations.js'
-const initialState = {
+import {IContact} from "../../utils/types";
+
+interface IContactsState {
+    contacts: IContact[],
+    isLoading: boolean,
+    error: unknown | string
+}
+const initialState: IContactsState = {
     contacts:[],
     isLoading: false,
     error: null
-}
+};
 
 export const contacts = createSlice({
     name: "contacts",
     initialState,
+    reducers:{},
     extraReducers: (builder) => {
-        builder.addCase(addContact.pending, (state, action) => {
+        builder.addCase(addContact.pending, (state) => {
             state.isLoading = true
         }).addCase(addContact.fulfilled, (state, action) => {
             state.contacts.push(action.payload)

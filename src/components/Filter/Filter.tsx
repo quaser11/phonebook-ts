@@ -1,12 +1,14 @@
 import TextField from "@mui/material/TextField";
-import {setFilter} from "../../redux/filters/slice.js";
+import {setFilter} from "../../redux/filters/slice.ts";
 import {useDispatch} from "react-redux";
+import {AppDispatch} from "../../redux/store.ts";
+import {ChangeEvent} from "react";
 
 
 const Filter = () => {
-    const dispatch = useDispatch();
+    const dispatch:AppDispatch = useDispatch();
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         dispatch(setFilter(e.target.value));
     }
 

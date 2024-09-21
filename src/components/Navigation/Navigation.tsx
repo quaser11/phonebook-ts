@@ -1,7 +1,7 @@
 import {Outlet} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
 import {Link} from './Navigation.js'
-import {useState} from 'react'
+import {FC, useState, MouseEvent} from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,27 +15,28 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import AuthNav from '../AuthNav/AuthNav.jsx'
+import AuthNav from '../AuthNav/AuthNav.tsx'
 import {useSelector, useDispatch} from 'react-redux'
-import * as authSelectors from "../../redux/auth/selectors.js";
-import {logOutFromAccount} from "../../redux/auth/operations.js";
+import * as authSelectors from "../../redux/auth/selectors.ts";
+import {logOutFromAccount} from "../../redux/auth/operations.ts";
+import {AppDispatch} from "../../redux/store.ts";
 
 
 const pages = ['home', 'contacts'];
 const settings = ['Log Out'];
 
-const Navigation = () => {
-    const [anchorElNav, setAnchorElNav] = useState(null);
-    const [anchorElUser, setAnchorElUser] = useState(null);
+const Navigation: FC = () => {
+    const [anchorElNav, setAnchorElNav] = useState<HTMLElement | null>(null);
+    const [anchorElUser, setAnchorElUser] = useState<HTMLElement | null>(null);
     const navigate = useNavigate()
     const name = useSelector(authSelectors.selectName)
     const isLogIn = useSelector(authSelectors.selectIsLoggedIn)
-    const dispatch = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
 
-    const handleOpenNavMenu = (event) => {
+    const handleOpenNavMenu = (event: MouseEvent<HTMLButtonElement>) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleOpenUserMenu = (event) => {
+    const handleOpenUserMenu = (event: MouseEvent<HTMLButtonElement>) => {
         setAnchorElUser(event.currentTarget);
     };
 
@@ -43,10 +44,12 @@ const Navigation = () => {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = (e) => {
+    const handleCloseUserMenu = (e: MouseEvent<HTMLElement>) => {
         setAnchorElUser(null);
 
-        if (e.target.nodeName === "DIV") {
+        const button = e.target as HTMLElement
+
+        if (button.nodeName === "DIV") {
             return
         }
         dispatch(logOutFromAccount());
@@ -146,14 +149,14 @@ const Navigation = () => {
                         </Box>
 
                         {!isLogIn && <Box>
-                            <AuthNav />
+                            <AuthNav/>
                         </Box>}
 
                         {isLogIn && <Box sx={{flexGrow: 0}}>
                             <Box component='span' sx={{margin: '0 20px 0 0', cursor: 'default'}}>Welcome, {name}</Box>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                    <Avatar alt={name.toUpperCase()} src="/static/images/avatar/2.jpg"/>
+                                    <Avatar alt={name?.toUpperCase()} src="/static/images/avatar/2.jpg"/>
                                 </IconButton>
                             </Tooltip>
                             <Menu

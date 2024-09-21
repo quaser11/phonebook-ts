@@ -1,7 +1,8 @@
 import Button from "@mui/material/Button";
-import {Link} from './AuthNav.js'
+import {Link} from './AuthNav.ts'
+import {FC} from "react";
 
-const AuthNav = () => {
+const AuthNav:FC = () => {
     return <>
         <Button sx={{my: 2, color: 'white'}}>
             <Link to='/register'>Register</Link>

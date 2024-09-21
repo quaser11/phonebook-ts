@@ -2,14 +2,16 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import {Form} from './ContactsForm.js'
+import {Form} from './ContactsForm'
 import TextField from "@mui/material/TextField";
 import CircularProgress from '@mui/material/CircularProgress';
 import {useDispatch, useSelector} from "react-redux";
-import {addContact, editContact} from '../../redux/contacts/operations.js'
-import {selectIsLoading} from "../../redux/contacts/selectors.js";
-import {useEffect} from "react";
+import {addContact, editContact} from '../../redux/contacts/operations'
+import {selectIsLoading} from "../../redux/contacts/selectors";
+import {FC, FormEvent, useEffect} from "react";
 import toast, {Toaster} from 'react-hot-toast';
+import {AppDispatch} from "../../redux/store";
+import {IContact} from "../../utils/types";
 
 const style = {
     position: 'absolute',
@@ -22,17 +24,23 @@ const style = {
     p: 4,
 };
 
-const ContactsForm = ({action, contactId, contact}) => {
+interface IContactsFormProps {
+    action: string,
+    contactId?: string,
+    contact?: Omit<IContact, 'id'>
+}
+const ContactsForm:FC<IContactsFormProps> = ({action, contactId, contact}) => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const dispatch = useDispatch()
+    const dispatch: AppDispatch = useDispatch()
     const Loading = useSelector(selectIsLoading)
 
-    const onSubmit = (e, id = null) => {
+    const onSubmit = (e: FormEvent<HTMLFormElement>, id = '') => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData);
+        const form = e.target as HTMLFormElement
+        const formData = new FormData(form);
+        const data:Omit<IContact, 'id'>= Object.fromEntries(formData) as Omit<IContact, 'id'>
 
         if (data.name === '' || data.number === '') {
             return
@@ -40,8 +48,9 @@ const ContactsForm = ({action, contactId, contact}) => {
 
         if (action === 'create contact') {
             dispatch(addContact(data))
-            return toast.success(`Contact ${data.name} has been added successfully.`)
-        } else if (action === 'edit') {
+            toast.success(`Contact ${data.name} has been added successfully.`)
+            return
+        } else if (action === 'edit' && id !== '') {
             dispatch(editContact({
                 id,
                 body: data
@@ -49,7 +58,7 @@ const ContactsForm = ({action, contactId, contact}) => {
             toast.success(`Contact ${data.name} has been updated successfully.`)
         }
 
-        e.target.reset()
+        form.reset()
     }
 
     useEffect(() => {
@@ -70,11 +79,11 @@ const ContactsForm = ({action, contactId, contact}) => {
                     aria-describedby="modal-modal-description"
                 >
                     <Box sx={style}>
-                        <Form onSubmit={(e) => onSubmit(e, contactId)}>
+                        <Form onSubmit={(e: FormEvent<HTMLFormElement>) => onSubmit(e, contactId)}>
                             <TextField name='name' label="Name" variant="standard"
-                                       defaultValue={action === 'edit' ? contact.name : null}/>
+                                       defaultValue={action === 'edit' ? contact?.name : null}/>
                             <TextField name='number' label="Number" variant="standard"
-                                       defaultValue={action === 'edit' ? contact.number : null}/>
+                                       defaultValue={action === 'edit' ? contact?.number : null}/>
                             <Button sx={{bgcolor: '#1976d2', color: 'white'}} type='submit'
                                     disabled={Loading}>{Loading ?
                                 <CircularProgress sx={{color: 'white'}} size='24px'/> : action}</Button>
@@ -87,4 +96,4 @@ const ContactsForm = ({action, contactId, contact}) => {
     );
 }
 
-export default ContactsForm;
+export default ContactsForm

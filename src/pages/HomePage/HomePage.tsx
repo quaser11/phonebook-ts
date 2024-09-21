@@ -1,6 +1,7 @@
 import {HomeContainer, Title} from './HomePage.js';
+import {FC} from "react";
 
-const HomePage = () => {
+const HomePage:FC = () => {
     return <HomeContainer>
         <Title>Welcome to My Contacts!</Title>
     </HomeContainer>;

@@ -1,6 +1,6 @@
-import {useFormik} from 'formik';
-import {useState} from 'react'
-import {SignUpForm, SignUpContainer} from './SignUp.js'
+import {FormikHelpers, useFormik} from 'formik';
+import {useState, MouseEvent, FC} from 'react'
+import {LogInForm, LogInContainer} from './LogIn.js'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -13,32 +13,35 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import * as yup from 'yup';
 import {useDispatch} from "react-redux";
-import {signUpToAccount} from "../../redux/auth/operations.js";
+import {logInToAccount} from "../../redux/auth/operations";
+import {AppDispatch} from "../../redux/store";
 
-const initialValues = {
-    name: '',
+interface IValues {
+    email:string,
+    password:string,
+}
+const initialValues: IValues = {
     email: '',
     password: ''
 }
 
 const validationSchema = yup.object({
-    name: yup.string().min(3).max(16).required('Name is required'),
     email: yup.string().email().required('Email is required'),
     password: yup.string().min(7).max(24).required('Password is required')
 })
 
-const SignUp = () => {
-    const dispatch = useDispatch()
+const LogIn:FC = () => {
+    const dispatch: AppDispatch = useDispatch()
 
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-    const handleMouseDownPassword = (event) => {
+    const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
 
-    const handleMouseUpPassword = (event) => {
+    const handleMouseUpPassword = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
 
@@ -46,21 +49,15 @@ const SignUp = () => {
     const formik = useFormik({
         initialValues,
         validationSchema,
-        onSubmit: (values, action) => {
-            dispatch(signUpToAccount(values))
+        onSubmit: (values:IValues, {resetForm}:FormikHelpers<IValues>) => {
+            dispatch(logInToAccount(values))
+
+            resetForm()
         }
     })
 
-    return <SignUpContainer>
-        <SignUpForm onSubmit={formik.handleSubmit}>
-            <TextField id='text'
-                       name='name'
-                       label='Name'
-                       value={formik.values.name}
-                       onChange={formik.handleChange}
-                       onBlur={formik.handleBlur}
-                       error={formik.touched.name && Boolean(formik.errors.name)}
-                       helperText={formik.touched.name && formik.errors.name}/>
+    return <LogInContainer>
+        <LogInForm onSubmit={formik.handleSubmit}>
             <TextField id="email"
                        name="email"
                        label="Email"
@@ -70,7 +67,7 @@ const SignUp = () => {
                        error={formik.touched.email && Boolean(formik.errors.email)}
                        helperText={formik.touched.email && formik.errors.email}/>
             <FormControl variant="outlined" error={formik.touched.password && Boolean(formik.errors.password)}
-                         >
+            >
                 <InputLabel htmlFor="password">Password</InputLabel>
                 <OutlinedInput
                     id="password"
@@ -97,13 +94,13 @@ const SignUp = () => {
                 {formik.touched.password && formik.errors.password && (
                     <FormHelperText>{formik.errors.password}</FormHelperText>
                 )}
-            </FormControl>
+            </FormControl >
             <Button type='submit' sx={{
                 color: 'white',
                 backgroundColor: '#1976d2'
-            }}>Sign Up</Button>
-        </SignUpForm>
-    </SignUpContainer>
+            }}>Log In</Button>
+        </LogInForm>
+    </LogInContainer>
 }
 
-export default SignUp;
+export default LogIn;

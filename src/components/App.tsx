@@ -1,28 +1,24 @@
-import Navigation from './Navigation/Navigation.jsx';
+import Navigation from './Navigation/Navigation.tsx';
 import {Routes, Route} from "react-router-dom";
-import HomePage from '../pages/HomePage/HomePage.jsx'
-import SignUp from '../pages/SignUp/SignUp.jsx'
-import LogIn from '../pages/LogIn/LogIn.jsx'
-import ContactPage from '../pages/ContactPage/ContactPage.jsx'
-import PrivateRoute from './PrivateRoute/PrivateRoute.jsx'
-import PublicRoute from './PublicRoute/PublicRoute.jsx'
+import HomePage from '../pages/HomePage/HomePage.tsx'
+import SignUp from '../pages/SignUp/SignUp.tsx'
+import LogIn from '../pages/LogIn/LogIn.tsx'
+import ContactPage from '../pages/ContactPage/ContactPage.tsx'
+import PrivateRoute from './PrivateRoute/PrivateRoute.js'
+import PublicRoute from './PublicRoute/PublicRoute.js'
 import {useDispatch, useSelector} from "react-redux";
 import {fetchCurrentUser} from "../redux/auth/operations.js";
-import {useEffect} from 'react'
-import {selectRefreshing, selectError} from "../redux/auth/selectors.js";
+import {FC, useEffect} from 'react'
+import {selectRefreshing} from "../redux/auth/selectors.js";
 import toast, {Toaster} from 'react-hot-toast';
+import {AppDispatch} from "../redux/store";
 
-function App() {
-    const dispatch = useDispatch();
-    const refreshing = useSelector(selectRefreshing);
-    const error = useSelector(selectError);
+const App:FC = function() {
+    const dispatch: AppDispatch = useDispatch();
+    const refreshing:boolean = useSelector(selectRefreshing);
+
     useEffect(() => {
         dispatch(fetchCurrentUser())
-
-        if (error) {
-            toast.error(error);
-        }
-
     }, [dispatch])
 
     return (

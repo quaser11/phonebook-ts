@@ -1,10 +1,13 @@
 import {useSelector, useDispatch} from 'react-redux'
-import {selectIsLoading, selectVisibleContacts} from "../../redux/contacts/selectors.js";
+import {selectIsLoading, selectVisibleContacts} from "../../redux/contacts/selectors";
 import {Avatar, List} from 'antd';
 import Button from '@mui/material/Button';
-import {removeContact} from '../../redux/contacts/operations.js'
-import ContactsForm from "../ContactsForm/ContactsForm.jsx";
+import {removeContact} from '../../redux/contacts/operations'
+import ContactsForm from "../ContactsForm/ContactsForm.tsx";
 import toast, {Toaster} from 'react-hot-toast';
+import {FC} from "react";
+import {IContact} from "../../utils/types";
+import {AppDispatch} from "../../redux/store";
 
 const style = {
     position: 'absolute',
@@ -17,13 +20,13 @@ const style = {
     p: 4,
 };
 
-const ContactsList = () => {
-    const dispatch = useDispatch();
+const ContactsList: FC = () => {
+    const dispatch: AppDispatch = useDispatch();
     const loading = useSelector(selectIsLoading)
 
     const data = useSelector(selectVisibleContacts)
 
-    const handleDeleteClick = (id, name) => {
+    const handleDeleteClick = (id: string, name: string) => {
         toast.success(`Contact ${name} has been deleted`);
         dispatch(removeContact(id))
     }

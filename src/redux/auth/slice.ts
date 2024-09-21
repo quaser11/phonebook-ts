@@ -1,7 +1,16 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {signUpToAccount, logInToAccount, logOutFromAccount, fetchCurrentUser} from "./operations.js";
+import {signUpToAccount, logInToAccount, logOutFromAccount, fetchCurrentUser} from "./operations";
 
-const initialState = {
+interface IAuthState {
+    user: {
+        name: string | null,
+        email: string | null,
+    }
+    token: string | null,
+    isLoggedIn: boolean,
+    isRefreshing: boolean,
+}
+const initialState: IAuthState = {
     user: {
         name: null,
         email: null,
@@ -14,6 +23,7 @@ const initialState = {
 export const auth = createSlice({
     name: "auth",
     initialState,
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(signUpToAccount.fulfilled, (state, action) => {
             state.user = action.payload.user
@@ -32,7 +42,6 @@ export const auth = createSlice({
             state.user = action.payload
             state.isLoggedIn = true
             state.isRefreshing = false
-            state.error = null
         }).addCase(fetchCurrentUser.rejected, (state, action) => {
             state.isLoggedIn = false
             state.isRefreshing = false

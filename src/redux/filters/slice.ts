@@ -1,6 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-const initialState = {
+interface IFilter {
+    name: string;
+}
+const initialState: IFilter = {
     name: ''
 }
 
